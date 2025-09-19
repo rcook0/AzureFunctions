@@ -8,13 +8,8 @@ on:
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: azure-func-demo   # all commands run in this subfolder
-
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
+      - uses: actions/checkout@v3
 
       - name: Setup Node.js
         uses: actions/setup-node@v3
@@ -24,13 +19,10 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Build (optional)
-        run: npm run build --if-present
-
-      - name: Deploy to Azure Functions
+      - name: Azure Functions Action
         uses: Azure/functions-action@v1
         with:
           app-name: ${{ secrets.AZURE_FUNCTIONAPP_NAME }}
-          package: 'azure-func-demo'
+          package: '.'
         env:
           AZURE_FUNCTIONAPP_PUBLISH_PROFILE: ${{ secrets.AZURE_FUNCTIONAPP_PUBLISH_PROFILE }}
