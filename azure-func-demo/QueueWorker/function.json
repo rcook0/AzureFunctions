@@ -1,0 +1,18 @@
+{
+  "bindings": [
+    {
+      "name": "queueItem",
+      "type": "queueTrigger",
+      "direction": "in",
+      "queueName": "tasks",
+      "connection": "AzureWebJobsStorage"
+    },
+    {
+      "name": "outputBlob",
+      "type": "blob",
+      "direction": "out",
+      "path": "processed/{rand-guid}.json",
+      "connection": "AzureWebJobsStorage"
+    }
+  ]
+}

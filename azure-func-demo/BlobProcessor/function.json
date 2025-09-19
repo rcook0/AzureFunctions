@@ -1,0 +1,19 @@
+{
+  "bindings": [
+    {
+      "name": "myBlob",
+      "type": "blobTrigger",
+      "direction": "in",
+      "path": "processed/{name}",
+      "connection": "AzureWebJobsStorage"
+    },
+    {
+      "name": "document",
+      "type": "cosmosDB",
+      "direction": "out",
+      "databaseName": "MyDB",
+      "collectionName": "Items",
+      "connectionStringSetting": "CosmosDBConnection"
+    }
+  ]
+}
