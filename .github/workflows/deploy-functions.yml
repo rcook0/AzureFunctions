@@ -1,4 +1,4 @@
-name: Deploy All Function Apps
+name: Deploy All Azure Function Apps
 
 on:
   push:
@@ -15,14 +15,14 @@ jobs:
 
       - id: set-matrix
         run: |
-          # Find subfolders containing host.json (marks a Function App project)
+          # Find all subfolders under repo root that have a host.json
           folders=$(find . -maxdepth 1 -type d ! -name ".github" ! -name "." | sed 's|./||')
-          echo "Found folders: $folders"
-
+          echo "Scanning for function app folders..."
           json="["
           for f in $folders; do
             if [ -f "$f/host.json" ]; then
               json="$json\"$f\","
+              echo "✔ Found: $f"
             fi
           done
           json="${json%,}]"
@@ -50,9 +50,8 @@ jobs:
       - name: Deploy to Azure Functions
         uses: Azure/functions-action@v1
         with:
-          # Assumes your Azure Function App name matches the folder name
           app-name: ${{ matrix.folder }}
           package: ${{ matrix.folder }}
         env:
-          # Each Function App needs its own publish profile secret
-          AZURE_FUNCTIONAPP_PUBLISH_PROFILE: ${{ secrets[matrix.folder | upper]_PUBLISH_PROFILE }}
+          # Expect secret named <FOLDERNAME>_PUBLISH_PROFILE
+          AZURE_FUNCTIONAPP_PUBLISH_PROFILE: ${{ secrets[format('{0}_PUBLISH_PROFILE', matrix.folder)] }}
