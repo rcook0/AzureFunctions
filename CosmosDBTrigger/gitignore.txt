@@ -1,0 +1,7 @@
+bin/
+obj/
+local.settings.json
+.vscode/
+*.user
+*.swp
+npm-debug.log
